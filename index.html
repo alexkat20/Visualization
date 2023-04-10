@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<meta charset="utf-8" />
+<link rel="stylesheet" href="style.css" />
+
+<!-- Load d3.js -->
+<script src="https://d3js.org/d3.v4.js"></script>
+<script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
+<script src="https://d3js.org/d3-geo-projection.v2.min.js"></script>
+
+
+<h2>Сменить карту</h2>
+<form id="form" class="btn-group btn-group-toggle" data-toggle="buttons">
+    <label class="btn btn-secondary active">
+        <input type="radio" name="controlHeatmapType" value="MRR" checked>Популярность киновселенных в странах<br>
+    </label>
+    <label class="btn btn-secondary">
+        <input type="radio" name="controlHeatmapType" value="LYL">Популярность супергероев в странах<br>
+    </label>
+</form>
+
+<!-- Create an element where the map will take place -->
+<svg id="my_dataviz" class="f" width="1200" height="1000"></svg>
+<svg id="my_dataviz2" class="s" width="1200" height="1000" display="none"></svg>
+
+
+<script>
+  // The svg
+  var svg1 = d3.select("svg.f");
+  var width = 1200;
+  var height = 1000;
+
+  var svg2 = d3.select("svg.s");
+
+  var div = d3
+    .select("body")
+    .append("div")
+    .attr("class", "tooltip-donut")
+    .style("opacity", 0);
+  var img = d3
+      .select("body")
+      .append("img")
+      .style("opacity", 0);
+  // Map and projection
+  var path = d3.geoPath();
+  var projection = d3
+    .geoMercator()
+    .scale(150)
+    .center([0, 30])
+    .translate([width / 2, height / 2]);
+
+  // Data and color scale
+  var data = d3.map();
+  var colorScale = d3
+    .scaleOrdinal()
+    .domain(["Marvel", "DC", "No_data"])
+    .range(["red", "blue", "grey"]);
+
+  var colorScale1 = d3
+      .scaleOrdinal()
+      .domain(["Marvel", "DC", "No_data"])
+      .range(["yellow", "blue", "grey"]);
+
+  const buttons = d3.selectAll('input');
+
+  buttons.on('change', function(d) {
+      const paraID = d3.select(this).attr("value");
+      if (paraID === "MRR"){
+          // Load external data and boot
+          document.getElementById("my_dataviz").style.display = "block";
+          document.getElementById("my_dataviz2").style.display = "none";
+
+      }
+      else {
+          document.getElementById("my_dataviz2").style.display = "block";
+          document.getElementById("my_dataviz").style.display = "none";
+      }
+
+  });
+
+  d3.queue().defer(d3.json, "Heroes_with_countries.geojson").await(firstMap);
+
+  function firstMap(error, topo) {
+    // Draw the map
+    svg1
+        .append("g")
+        .selectAll("path")
+        .data(topo.features)
+        .enter()
+        .append("path")
+        // draw each country
+        .attr("d", d3.geoPath().projection(projection))
+        // set the color of each country
+        .attr("fill", function (d) {
+          //console.log(d.properties["Universe Logo"]);
+          return colorScale(d.properties.Universe);
+        })
+        .on("mouseover", function (d, i) {
+          d3.select(this).transition().duration("50").attr("opacity", "0.85");
+          div.transition().duration(50).style("opacity", 1);
+          let num = d.properties.ADMIN;
+          console.log(num);
+          div
+            .html(num)
+            .style("left", d3.event.pageX + 10 + "px")
+            .style("top", d3.event.pageY - 15 + "px");
+        });
+    svg1
+        .append("circle")
+        .attr("cx", 50)
+        .attr("cy", 650)
+        .attr("r", 20)
+        .style("fill", "red");
+    svg1
+        .append("circle")
+        .attr("cx", 50)
+        .attr("cy", 720)
+        .attr("r", 20)
+        .style("fill", "blue");
+    svg1
+        .append("circle")
+        .attr("cx", 50)
+        .attr("cy", 580)
+        .attr("r", 20)
+        .style("fill", "grey");
+    svg1
+        .append("text")
+        .attr("x", 100)
+        .attr("y", 650)
+        .text("-")
+        .style("font-size", "25px")
+        .attr("alignment-baseline", "middle");
+    svg1
+        .append("text")
+        .attr("x", 100)
+        .attr("y", 720)
+        .text("-")
+        .style("font-size", "25px")
+        .attr("alignment-baseline", "middle");
+    svg1
+        .append("text")
+        .attr("x", 100)
+        .attr("y", 580)
+        .text("-")
+        .style("font-size", "25px")
+        .attr("alignment-baseline", "middle");
+    svg1
+        .append("text")
+        .attr("x", 150)
+        .attr("y", 580)
+        .text(" No data")
+        .style("font-size", "25px")
+        .attr("alignment-baseline", "middle");
+    svg1
+        .append("text")
+        .attr("x", 100)
+        .attr("y", 580)
+        .text("-")
+        .style("font-size", "25px")
+        .attr("alignment-baseline", "middle");
+    svg1
+        .append("text")
+        .attr("x", 150)
+        .attr("y", 580)
+        .text(" No data")
+        .style("font-size", "25px")
+        .attr("alignment-baseline", "middle");
+    svg1
+        .append("svg:image")
+        .attr("x", 150)
+        .attr("y", 610)
+        .attr("width", 100)
+        .attr("height", 80)
+        .attr("xlink:href", function (d) {
+          return "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b9/Marvel_Logo.svg/2560px-Marvel_Logo.svg.png";
+        });
+    svg1
+        .append("svg:image")
+        .attr("x", 150)
+        .attr("y", 680)
+        .attr("width", 100)
+        .attr("height", 80)
+        .attr("xlink:href", function (d) {
+          return "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1c/DC_Comics_logo.png/768px-DC_Comics_logo.png";
+        });
+    svg1
+        .append("text")
+        .attr("x", 300)
+        .attr("y", 20)
+        .attr("font-family", "Helvetica")
+        .text("Самая популярная киновселенная по всему миру")
+        .style("font-size", "25px")
+        .attr("alignment-baseline", "middle");
+
+    svg2
+        .append("g")
+        .selectAll("path")
+        .data(topo.features)
+        .enter()
+        .append("path")
+        // draw each country
+        .attr("d", d3.geoPath().projection(projection))
+        // set the color of each country
+        .attr("fill", function (d) {
+            //console.log(d.properties["Universe Logo"]);
+            return colorScale1(d.properties.Universe);
+        });
+
+  }
+
+</script>
+
