@@ -6,6 +6,8 @@
 <script src="https://d3js.org/d3.v4.js"></script>
 <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
 <script src="https://d3js.org/d3-geo-projection.v2.min.js"></script>
+<script src="https://d3js.org/queue.v1.min.js"></script>
+<script src="https://d3js.org/topojson.v1.min.js"></script>
 
 
 <h2>Сменить карту</h2>
@@ -24,6 +26,315 @@
 
 
 <script>
+
+    var flags = {"Afghanistan": "./Media/BP.png",
+        "Belize": "./Media/BP.png",
+        "Benin": "./Media/BP.png",
+        "Botswana": "./Media/BP.png",
+        "Burkina Faso": "./Media/BP.png",
+        "Cameroon": "./Media/BP.png",
+        "Canada": "./Media/BP.png",
+        "Dem. Rep. Congo": "./Media/BP.png",
+        "Ivory Coast": "./Media/BP.png",
+        "Djibouti": "./Media/BP.png",
+        "Estonia": "./Media/BP.png",
+        "Ethiopia": "./Media/BP.png",
+        "Gabon": "./Media/BP.png",
+        "Ghana": "./Media/BP.png",
+        "Guyana": "./Media/BP.png",
+        "Haiti": "./Media/BP.png",
+        "Ireland": "./Media/BP.png",
+        "Jamaica": "./Media/BP.png",
+        "Jordan": "./Media/BP.png",
+        "Kenya": "./Media/BP.png",
+        "South Korea": "./Media/BP.png",
+        "Kuwait": "./Media/BP.png",
+        "Macedonia": "./Media/BP.png",
+        "Malawi": "./Media/BP.png",
+        "Mali": "./Media/BP.png",
+        "Namibia": "./Media/BP.png",
+        "Niger": "./Media/BP.png",
+        "Nigeria": "./Media/BP.png",
+        "Oman": "./Media/BP.png",
+        "Qatar": "./Media/BP.png",
+        "Rwanda": "./Media/BP.png",
+        "Saudi Arabia": "./Media/BP.png",
+        "Senegal": "./Media/BP.png",
+        "Tanzania": "./Media/BP.png",
+        "Thailand": "./Media/BP.png",
+        "Togo": "./Media/BP.png",
+        "Trinidad and Tobago": "./Media/BP.png",
+        "United Arab Emirates": "./Media/BP.png",
+        "Zambia": "./Media/BP.png",
+        "Zimbabwe": "./Media/BP.png",
+        "South Africa": "./Media/BP.png",
+
+        "Albania": "./Media/SpM.png",
+        "Algeria": "./Media/SpM.png",
+        "Argentina": "./Media/SpM.png",
+        "Armenia": "./Media/SpM.png",
+        "Azerbaijan": "./Media/SpM.png",
+        "Belgium": "./Media/SpM.png",
+        "Bosnia and Herz.": "./Media/SpM.png",
+        "Bulgaria": "./Media/SpM.png",
+        "Ecuador": "./Media/SpM.png",
+        "Italy": "./Media/SpM.png",
+        "Laos": "./Media/SpM.png",
+        "Madagascar": "./Media/SpM.png",
+        "Mexico": "./Media/SpM.png",
+        "Montenegro": "./Media/SpM.png",
+        "Morocco": "./Media/SpM.png",
+        "Peru": "./Media/SpM.png",
+        "Slovakia": "./Media/SpM.png",
+        "Spain": "./Media/SpM.png",
+        "Tunisia": "./Media/SpM.png",
+        "Venezuela": "./Media/SpM.png",
+        
+        "Australia": "./Media/CM.png",
+        "Austria": "./Media/CM.png",
+        "Brunei": "./Media/CM.png",
+        "Denmark": "./Media/CM.png",
+        "Iceland": "./Media/CM.png",
+        "Indonesia": "./Media/CM.png",
+        "Lebanon": "./Media/CM.png",
+        "Malaysia": "./Media/CM.png",
+        "Nepal": "./Media/CM.png",
+        "Philippines": "./Media/CM.png",
+        "Singapore": "./Media/CM.png",
+        "Sweden": "./Media/CM.png",
+        
+        "Chile": "./Media/DP.png",
+        "Colombia": "./Media/DP.png",
+        "Costa Rica": "./Media/DP.png",
+        "Dominican Rep.": "./Media/DP.png",
+        "El Salvador": "./Media/DP.png",
+        "Guatemala": "./Media/DP.png",
+        "Honduras": "./Media/DP.png",
+        "Hungary": "./Media/DP.png",
+        "Latvia": "./Media/DP.png",
+        "Lithuania": "./Media/DP.png",
+        "Nicaragua": "./Media/DP.png",
+        "Paraguay": "./Media/DP.png",
+        "Uruguay": "./Media/DP.png",
+        "Bhutan": "./Media/DP.png",
+        "Angola": "./Media/DP.png",
+        "Moldova": "./Media/DP.png",
+        "Poland": "./Media/DP.png",
+        "Romania": "./Media/DP.png",
+        "Seychelles": "./Media/DP.png",
+
+        "Croatia": "./Media/WW.png",
+        "Finland": "./Media/WW.png",
+        "France": "./Media/WW.png",
+        "Iraq": "./Media/WW.png",
+        "Israel": "./Media/WW.png",
+        "Netherlands": "./Media/WW.png",
+        "Puerto Rico": "./Media/WW.png",
+        "Serbia": "./Media/WW.png",
+        "Switzerland": "./Media/WW.png",
+        "Taiwan": "./Media/WW.png",
+        "Vietnam": "./Media/WW.png",
+        
+        "Bolivia": "./Media/A.png",
+        "Egypt": "./Media/A.png",
+        "India": "./Media/A.png",
+        "Panama": "./Media/A.png",
+        "Suriname": "./Media/A.png",
+        "Kyrgyzstan": "./Media/A.png",
+
+        "Bangladesh": "./Media/JL.png",
+        "Fiji": "./Media/JL.png",
+        "Libya": "./Media/JL.png",
+        "Maldives": "./Media/JL.png",
+        "Malta": "./Media/JL.png",
+        "Mauritania": "./Media/JL.png",
+        "Pakistan": "./Media/JL.png",
+        "Saint Vincent and the Grenadines": "./Media/JL.png",
+        "Sri Lanka": "./Media/JL.png",
+        
+        "Brazil": "./Media/AM.png",
+        "Cambodia": "./Media/AM.png",
+        "Mozambique": "./Media/AM.png",
+
+        "Czechia": "./Media/V.png",
+        "Kazakhstan": "./Media/V.png",
+        "Palestine": "./Media/V.png",
+        "Ukraine": "./Media/V.png",
+
+        "Cyprus": "./Media/J.png",
+        "Georgia": "./Media/J.png",
+        "Greece": "./Media/J.png",
+        "Mongolia": "./Media/J.png",
+        "Norway": "./Media/J.png",
+        "Portugal": "./Media/J.png",
+        "Slovenia": "./Media/J.png",
+        "Tajikistan": "./Media/J.png",
+        "Turkey": "./Media/J.png",
+
+        "Russia": "./Media/BM.png",
+        "Germany": "./Media/GG.png",
+
+        "United States of America": "./Media/BM.png",
+
+        "Belarus": "./Media/SS.png",
+        "Luxembourg": "./Media/SM.png",
+
+        "Japan": "./Media/XM.png",
+
+        "United Kingdom": "./Media/CM.png",
+
+        "Bahamas": "./Media/WW.png",
+
+        "New Zealand": "./Media/BP.png",
+
+        'Guinea': 'https://htmlcolorcodes.com/assets/images/colors/gray-color-solid-background-1920x1080.png',
+        'Uzbekistan': 'https://htmlcolorcodes.com/assets/images/colors/gray-color-solid-background-1920x1080.png',
+        'Yemen': 'https://htmlcolorcodes.com/assets/images/colors/gray-color-solid-background-1920x1080.png',
+        'W. Sahara': 'https://htmlcolorcodes.com/assets/images/colors/gray-color-solid-background-1920x1080.png',
+        'Iran': 'https://htmlcolorcodes.com/assets/images/colors/gray-color-solid-background-1920x1080.png',
+        'Burundi': 'https://htmlcolorcodes.com/assets/images/colors/gray-color-solid-background-1920x1080.png',
+        'Antarctica': 'https://htmlcolorcodes.com/assets/images/colors/gray-color-solid-background-1920x1080.png',
+        'Timor-Leste': 'https://htmlcolorcodes.com/assets/images/colors/gray-color-solid-background-1920x1080.png',
+        'Lesotho': 'https://htmlcolorcodes.com/assets/images/colors/gray-color-solid-background-1920x1080.png',
+        'China': 'https://htmlcolorcodes.com/assets/images/colors/gray-color-solid-background-1920x1080.png',
+        'North Korea': 'https://htmlcolorcodes.com/assets/images/colors/gray-color-solid-background-1920x1080.png',
+        'Papua New Guinea': 'https://htmlcolorcodes.com/assets/images/colors/gray-color-solid-background-1920x1080.png',
+        'Chad': 'https://htmlcolorcodes.com/assets/images/colors/gray-color-solid-background-1920x1080.png',
+        'eSwatini': 'https://htmlcolorcodes.com/assets/images/colors/gray-color-solid-background-1920x1080.png',
+        'S. Sudan': 'https://htmlcolorcodes.com/assets/images/colors/gray-color-solid-background-1920x1080.png',
+        'Myanmar': 'https://htmlcolorcodes.com/assets/images/colors/gray-color-solid-background-1920x1080.png',
+        'Sudan': 'https://htmlcolorcodes.com/assets/images/colors/gray-color-solid-background-1920x1080.png',
+        'Eritrea': 'https://htmlcolorcodes.com/assets/images/colors/gray-color-solid-background-1920x1080.png',
+        'Turkmenistan': 'https://htmlcolorcodes.com/assets/images/colors/gray-color-solid-background-1920x1080.png',
+        'Central African Rep.': 'https://htmlcolorcodes.com/assets/images/colors/gray-color-solid-background-1920x1080.png',
+        'Somaliland': 'https://htmlcolorcodes.com/assets/images/colors/gray-color-solid-background-1920x1080.png',
+        'Kosovo': 'https://htmlcolorcodes.com/assets/images/colors/gray-color-solid-background-1920x1080.png',
+        'Cuba': 'https://htmlcolorcodes.com/assets/images/colors/gray-color-solid-background-1920x1080.png',
+        'Greenland': 'https://htmlcolorcodes.com/assets/images/colors/gray-color-solid-background-1920x1080.png',
+        'Sierra Leone': 'https://htmlcolorcodes.com/assets/images/colors/gray-color-solid-background-1920x1080.png',
+        "Côte d'Ivoire": 'https://htmlcolorcodes.com/assets/images/colors/gray-color-solid-background-1920x1080.png',
+        'Somalia': 'https://htmlcolorcodes.com/assets/images/colors/gray-color-solid-background-1920x1080.png',
+        'Liberia': 'https://htmlcolorcodes.com/assets/images/colors/gray-color-solid-background-1920x1080.png',
+        'New Caledonia': 'https://htmlcolorcodes.com/assets/images/colors/gray-color-solid-background-1920x1080.png',
+        'Falkland Is.': 'https://htmlcolorcodes.com/assets/images/colors/gray-color-solid-background-1920x1080.png',
+        'N. Cyprus': 'https://htmlcolorcodes.com/assets/images/colors/gray-color-solid-background-1920x1080.png',
+        'Uganda': 'https://htmlcolorcodes.com/assets/images/colors/gray-color-solid-background-1920x1080.png',
+        'Vanuatu': 'https://htmlcolorcodes.com/assets/images/colors/gray-color-solid-background-1920x1080.png',
+        'Eq. Guinea': 'https://htmlcolorcodes.com/assets/images/colors/gray-color-solid-background-1920x1080.png',
+        'Guinea-Bissau': 'https://htmlcolorcodes.com/assets/images/colors/gray-color-solid-background-1920x1080.png',
+        'Congo': 'https://htmlcolorcodes.com/assets/images/colors/gray-color-solid-background-1920x1080.png',
+        'Syria': 'https://htmlcolorcodes.com/assets/images/colors/gray-color-solid-background-1920x1080.png',
+        'Gambia': 'https://htmlcolorcodes.com/assets/images/colors/gray-color-solid-background-1920x1080.png',
+        'Fr. S. Antarctic Lands': 'https://htmlcolorcodes.com/assets/images/colors/gray-color-solid-background-1920x1080.png',
+        'Solomon Is.': 'https://htmlcolorcodes.com/assets/images/colors/gray-color-solid-background-1920x1080.png',
+        'Chad': 'https://htmlcolorcodes.com/assets/images/colors/gray-color-solid-background-1920x1080.png',
+        'Aruba': 'https://htmlcolorcodes.com/assets/images/colors/gray-color-solid-background-1920x1080.png',
+        'Anguilla': 'https://htmlcolorcodes.com/assets/images/colors/gray-color-solid-background-1920x1080.png',
+        'Aland': 'https://htmlcolorcodes.com/assets/images/colors/gray-color-solid-background-1920x1080.png',
+        'American Samoa': 'https://htmlcolorcodes.com/assets/images/colors/gray-color-solid-background-1920x1080.png',
+        'Antarctica': 'https://htmlcolorcodes.com/assets/images/colors/gray-color-solid-background-1920x1080.png',
+        'Ashmore and Cartier Islands': 'https://htmlcolorcodes.com/assets/images/colors/gray-color-solid-background-1920x1080.png',
+        'French Southern and Antarctic Lands': 'https://htmlcolorcodes.com/assets/images/colors/gray-color-solid-background-1920x1080.png',
+        'Burundi': 'https://htmlcolorcodes.com/assets/images/colors/gray-color-solid-background-1920x1080.png',
+        'Bajo Nuevo Bank (Petrel Is.)': 'https://htmlcolorcodes.com/assets/images/colors/gray-color-solid-background-1920x1080.png',
+        'Saint Barthelemy': 'https://htmlcolorcodes.com/assets/images/colors/gray-color-solid-background-1920x1080.png',
+        'Bermuda': 'https://htmlcolorcodes.com/assets/images/colors/gray-color-solid-background-1920x1080.png',
+        'Barbados': 'https://htmlcolorcodes.com/assets/images/colors/gray-color-solid-background-1920x1080.png',
+        'Central African Republic': 'https://htmlcolorcodes.com/assets/images/colors/gray-color-solid-background-1920x1080.png',
+        'China': 'https://htmlcolorcodes.com/assets/images/colors/gray-color-solid-background-1920x1080.png',
+        'Clipperton Island': 'https://htmlcolorcodes.com/assets/images/colors/gray-color-solid-background-1920x1080.png',
+        'Cyprus No Mans Area': 'https://htmlcolorcodes.com/assets/images/colors/gray-color-solid-background-1920x1080.png',
+        'Republic of Congo': 'https://htmlcolorcodes.com/assets/images/colors/gray-color-solid-background-1920x1080.png',
+        'Cook Islands': 'https://htmlcolorcodes.com/assets/images/colors/gray-color-solid-background-1920x1080.png',
+        'Comoros': 'https://htmlcolorcodes.com/assets/images/colors/gray-color-solid-background-1920x1080.png',
+        'Coral Sea Islands': 'https://htmlcolorcodes.com/assets/images/colors/gray-color-solid-background-1920x1080.png',
+        'Cuba': 'https://htmlcolorcodes.com/assets/images/colors/gray-color-solid-background-1920x1080.png',
+        'Curaçao': 'https://htmlcolorcodes.com/assets/images/colors/gray-color-solid-background-1920x1080.png',
+        'Cayman Islands': 'https://htmlcolorcodes.com/assets/images/colors/gray-color-solid-background-1920x1080.png',
+        'Northern Cyprus': 'https://htmlcolorcodes.com/assets/images/colors/gray-color-solid-background-1920x1080.png',
+        'Dominica': 'https://htmlcolorcodes.com/assets/images/colors/gray-color-solid-background-1920x1080.png',
+        'Eritrea': 'https://htmlcolorcodes.com/assets/images/colors/gray-color-solid-background-1920x1080.png',
+        'Dhekelia Sovereign Base Area': 'https://htmlcolorcodes.com/assets/images/colors/gray-color-solid-background-1920x1080.png',
+        'Falkland Islands': 'https://htmlcolorcodes.com/assets/images/colors/gray-color-solid-background-1920x1080.png',
+        'Faroe Islands': 'https://htmlcolorcodes.com/assets/images/colors/gray-color-solid-background-1920x1080.png',
+        'Federated States of Micronesia': 'https://htmlcolorcodes.com/assets/images/colors/gray-color-solid-background-1920x1080.png',
+        'Guernsey': 'https://htmlcolorcodes.com/assets/images/colors/gray-color-solid-background-1920x1080.png',
+        'Guinea': 'https://htmlcolorcodes.com/assets/images/colors/gray-color-solid-background-1920x1080.png',
+        'Gambia': 'https://htmlcolorcodes.com/assets/images/colors/gray-color-solid-background-1920x1080.png',
+        'Guinea Bissau': 'https://htmlcolorcodes.com/assets/images/colors/gray-color-solid-background-1920x1080.png',
+        'Equatorial Guinea': 'https://htmlcolorcodes.com/assets/images/colors/gray-color-solid-background-1920x1080.png',
+        'Grenada': 'https://htmlcolorcodes.com/assets/images/colors/gray-color-solid-background-1920x1080.png',
+        'Greenland': 'https://htmlcolorcodes.com/assets/images/colors/gray-color-solid-background-1920x1080.png',
+        'Guam': 'https://htmlcolorcodes.com/assets/images/colors/gray-color-solid-background-1920x1080.png',
+        'Heard Island and McDonald Islands': 'https://htmlcolorcodes.com/assets/images/colors/gray-color-solid-background-1920x1080.png',
+        'Isle of Man': 'https://htmlcolorcodes.com/assets/images/colors/gray-color-solid-background-1920x1080.png',
+        'Indian Ocean Territories': 'https://htmlcolorcodes.com/assets/images/colors/gray-color-solid-background-1920x1080.png',
+        'British Indian Ocean Territory': 'https://htmlcolorcodes.com/assets/images/colors/gray-color-solid-background-1920x1080.png',
+        'Iran': 'https://htmlcolorcodes.com/assets/images/colors/gray-color-solid-background-1920x1080.png',
+        'Jersey': 'https://htmlcolorcodes.com/assets/images/colors/gray-color-solid-background-1920x1080.png',
+        'Baykonur Cosmodrome': 'https://htmlcolorcodes.com/assets/images/colors/gray-color-solid-background-1920x1080.png',
+        'Siachen Glacier': 'https://htmlcolorcodes.com/assets/images/colors/gray-color-solid-background-1920x1080.png',
+        'Kiribati': 'https://htmlcolorcodes.com/assets/images/colors/gray-color-solid-background-1920x1080.png',
+        'Saint Kitts and Nevis': 'https://htmlcolorcodes.com/assets/images/colors/gray-color-solid-background-1920x1080.png',
+        'Kosovo': 'https://htmlcolorcodes.com/assets/images/colors/gray-color-solid-background-1920x1080.png',
+        'Liberia': 'https://htmlcolorcodes.com/assets/images/colors/gray-color-solid-background-1920x1080.png',
+        'Saint Lucia': 'https://htmlcolorcodes.com/assets/images/colors/gray-color-solid-background-1920x1080.png',
+        'Liechtenstein': 'https://htmlcolorcodes.com/assets/images/colors/gray-color-solid-background-1920x1080.png',
+        'Lesotho': 'https://htmlcolorcodes.com/assets/images/colors/gray-color-solid-background-1920x1080.png',
+        'Macao S.A.R': 'https://htmlcolorcodes.com/assets/images/colors/gray-color-solid-background-1920x1080.png',
+        'Saint Martin': 'https://htmlcolorcodes.com/assets/images/colors/gray-color-solid-background-1920x1080.png',
+        'Monaco': 'https://htmlcolorcodes.com/assets/images/colors/gray-color-solid-background-1920x1080.png',
+        'Marshall Islands': 'https://htmlcolorcodes.com/assets/images/colors/gray-color-solid-background-1920x1080.png',
+        'Myanmar': 'https://htmlcolorcodes.com/assets/images/colors/gray-color-solid-background-1920x1080.png',
+        'Northern Mariana Islands': 'https://htmlcolorcodes.com/assets/images/colors/gray-color-solid-background-1920x1080.png',
+        'Mauritania': 'https://htmlcolorcodes.com/assets/images/colors/gray-color-solid-background-1920x1080.png',
+        'Montserrat': 'https://htmlcolorcodes.com/assets/images/colors/gray-color-solid-background-1920x1080.png',
+        'New Caledonia': 'https://htmlcolorcodes.com/assets/images/colors/gray-color-solid-background-1920x1080.png',
+        'Norfolk Island': 'https://htmlcolorcodes.com/assets/images/colors/gray-color-solid-background-1920x1080.png',
+        'Niue': 'https://htmlcolorcodes.com/assets/images/colors/gray-color-solid-background-1920x1080.png',
+        'Nauru': 'https://htmlcolorcodes.com/assets/images/colors/gray-color-solid-background-1920x1080.png',
+        'Pitcairn Islands': 'https://htmlcolorcodes.com/assets/images/colors/gray-color-solid-background-1920x1080.png',
+        'Spratly Islands': 'https://htmlcolorcodes.com/assets/images/colors/gray-color-solid-background-1920x1080.png',
+        'Palau': 'https://htmlcolorcodes.com/assets/images/colors/gray-color-solid-background-1920x1080.png',
+        'Papua New Guinea': 'https://htmlcolorcodes.com/assets/images/colors/gray-color-solid-background-1920x1080.png',
+        'North Korea': 'https://htmlcolorcodes.com/assets/images/colors/gray-color-solid-background-1920x1080.png',
+        'French Polynesia': 'https://htmlcolorcodes.com/assets/images/colors/gray-color-solid-background-1920x1080.png',
+        'Western Sahara': 'https://htmlcolorcodes.com/assets/images/colors/gray-color-solid-background-1920x1080.png',
+        'Scarborough Reef': 'https://htmlcolorcodes.com/assets/images/colors/gray-color-solid-background-1920x1080.png',
+        'Sudan': 'https://htmlcolorcodes.com/assets/images/colors/gray-color-solid-background-1920x1080.png',
+        'South Sudan': 'https://htmlcolorcodes.com/assets/images/colors/gray-color-solid-background-1920x1080.png',
+        'Serranilla Bank': 'https://htmlcolorcodes.com/assets/images/colors/gray-color-solid-background-1920x1080.png',
+        'South Georgia and South Sandwich Islands': 'https://htmlcolorcodes.com/assets/images/colors/gray-color-solid-background-1920x1080.png',
+        'Saint Helena': 'https://htmlcolorcodes.com/assets/images/colors/gray-color-solid-background-1920x1080.png',
+        'Solomon Islands': 'https://htmlcolorcodes.com/assets/images/colors/gray-color-solid-background-1920x1080.png',
+        'Sierra Leone': 'https://htmlcolorcodes.com/assets/images/colors/gray-color-solid-background-1920x1080.png',
+        'San Marino': 'https://htmlcolorcodes.com/assets/images/colors/gray-color-solid-background-1920x1080.png',
+        'Somaliland': 'https://htmlcolorcodes.com/assets/images/colors/gray-color-solid-background-1920x1080.png',
+        'Somalia': 'https://htmlcolorcodes.com/assets/images/colors/gray-color-solid-background-1920x1080.png',
+        'Saint Pierre and Miquelon': 'https://htmlcolorcodes.com/assets/images/colors/gray-color-solid-background-1920x1080.png',
+        'Sao Tome and Principe': 'https://htmlcolorcodes.com/assets/images/colors/gray-color-solid-background-1920x1080.png',
+        'Swaziland': 'https://htmlcolorcodes.com/assets/images/colors/gray-color-solid-background-1920x1080.png',
+        'Sint Maarten': 'https://htmlcolorcodes.com/assets/images/colors/gray-color-solid-background-1920x1080.png',
+        'Syria': 'https://htmlcolorcodes.com/assets/images/colors/gray-color-solid-background-1920x1080.png',
+        'Turks and Caicos Islands': 'https://htmlcolorcodes.com/assets/images/colors/gray-color-solid-background-1920x1080.png',
+        'Chad': 'https://htmlcolorcodes.com/assets/images/colors/gray-color-solid-background-1920x1080.png',
+        'Turkmenistan': 'https://htmlcolorcodes.com/assets/images/colors/gray-color-solid-background-1920x1080.png',
+        'East Timor': 'https://htmlcolorcodes.com/assets/images/colors/gray-color-solid-background-1920x1080.png',
+        'Tonga': 'https://htmlcolorcodes.com/assets/images/colors/gray-color-solid-background-1920x1080.png',
+        'Tuvalu': 'https://htmlcolorcodes.com/assets/images/colors/gray-color-solid-background-1920x1080.png',
+        'Uganda': 'https://htmlcolorcodes.com/assets/images/colors/gray-color-solid-background-1920x1080.png',
+        'United States Minor Outlying Islands': 'https://htmlcolorcodes.com/assets/images/colors/gray-color-solid-background-1920x1080.png',
+        'US Naval Base Guantanamo Bay': 'https://htmlcolorcodes.com/assets/images/colors/gray-color-solid-background-1920x1080.png',
+        'Uzbekistan': 'https://htmlcolorcodes.com/assets/images/colors/gray-color-solid-background-1920x1080.png',
+        'Vatican': 'https://htmlcolorcodes.com/assets/images/colors/gray-color-solid-background-1920x1080.png',
+        'United States Virgin Islands': 'https://htmlcolorcodes.com/assets/images/colors/gray-color-solid-background-1920x1080.png',
+        'Vanuatu': 'https://htmlcolorcodes.com/assets/images/colors/gray-color-solid-background-1920x1080.png',
+        'Wallis and Futuna': 'https://htmlcolorcodes.com/assets/images/colors/gray-color-solid-background-1920x1080.png',
+        'Akrotiri Sovereign Base Area': 'https://htmlcolorcodes.com/assets/images/colors/gray-color-solid-background-1920x1080.png',
+        'Samoa': 'https://htmlcolorcodes.com/assets/images/colors/gray-color-solid-background-1920x1080.png',
+        'Yemen': 'https://htmlcolorcodes.com/assets/images/colors/gray-color-solid-background-1920x1080.png'
+    };
+
   // The svg
   var svg1 = d3.select("svg.f");
   var width = 1200;
@@ -31,15 +342,15 @@
 
   var svg2 = d3.select("svg.s");
 
+  var keys = [];
+  for(var k in flags) keys.push(k);
+
   var div = d3
     .select("body")
     .append("div")
     .attr("class", "tooltip-donut")
     .style("opacity", 0);
-  var img = d3
-      .select("body")
-      .append("img")
-      .style("opacity", 0);
+
   // Map and projection
   var path = d3.geoPath();
   var projection = d3
@@ -48,17 +359,16 @@
     .center([0, 30])
     .translate([width / 2, height / 2]);
 
+  var path2 = d3.geoPath().projection(projection);
+
   // Data and color scale
-  var data = d3.map();
+
   var colorScale = d3
     .scaleOrdinal()
     .domain(["Marvel", "DC", "No_data"])
     .range(["red", "blue", "grey"]);
 
-  var colorScale1 = d3
-      .scaleOrdinal()
-      .domain(["Marvel", "DC", "No_data"])
-      .range(["yellow", "blue", "grey"]);
+  d3.queue().defer(d3.json, "Heroes_with_countries.geojson").await(firstMap);
 
   const buttons = d3.selectAll('input');
 
@@ -68,18 +378,123 @@
           // Load external data and boot
           document.getElementById("my_dataviz").style.display = "block";
           document.getElementById("my_dataviz2").style.display = "none";
+          d3.queue().defer(d3.json, "Heroes_with_countries.geojson").await(firstMap);
 
       }
       else {
           document.getElementById("my_dataviz2").style.display = "block";
           document.getElementById("my_dataviz").style.display = "none";
+
+          var q = queue()
+              .defer(d3.json, "https://unpkg.com/world-atlas@2.0.2/countries-110m.json") //  ./Heroes_with_countries.geojson
+              .defer(d3.tsv, "./world-country-names.tsv");
+          q.await(ready);
       }
 
   });
 
-  d3.queue().defer(d3.json, "Heroes_with_countries.geojson").await(firstMap);
+    function ready(error, world, names) {
+        if (error) {
+            alert('error: ' + error);
+            return ;
+        }
+        var countries = topojson.feature(world, world.objects.countries);
 
-  function firstMap(error, topo) {
+
+        svg2
+            .append("path")
+            .data(countries)
+            .attr("d", path);
+
+
+        var flag_countries = countries.features.filter(function (d) {
+            return names.some(function (n) {
+                if (d.properties.name === n.name && keys.indexOf(n.name) > -1) {
+                    d.name = n.name
+                    d.flag_src = flags[n.name];
+                    return true;
+                }
+            });
+        });
+
+        for (i=0; i<flag_countries.length; i++) {
+
+            var bounds = path2.bounds(flag_countries[i]);
+            var centroid = path2.centroid(flag_countries[i]);
+
+            var x = bounds[0][0];
+            var y = bounds[0][1];
+            var img_width = bounds[1][0] - bounds[0][0];
+            var img_height = bounds[1][1] - bounds[0][1];
+
+            flag_countries[i].name;
+
+            if (flag_countries[i].name === 'Russia'){
+                x = centroid[0] - 170;
+                y = centroid[1] - 190;
+                img_width = 400;
+                img_height =  400;
+            }
+            else if (flag_countries[i].name === 'United States of America'){
+                x = centroid[0] - 40;
+                y = centroid[1] - 60;
+                img_width = 200;
+                img_height =  200;
+            }
+            else if (flag_countries[i].name === 'France'){
+                console.log("FRANCE");
+                x = centroid[0] - 5;
+                y = centroid[1] - 25;
+                img_width = 30;
+                img_height =  30;
+            }
+            else if (flag_countries[i].flag_src === 'https://htmlcolorcodes.com/assets/images/colors/gray-color-solid-background-1920x1080.png'){
+                x = centroid[0] - 690;
+                y = centroid[1] - 270;
+                img_width = 1500;
+                img_height = 700;
+            }
+
+            svg2.append("clipPath")
+                .attr("class","mask")
+                .attr("id",function(d){return flag_countries[i].id;})
+                .append("path")
+                .attr("d",path2(flag_countries[i]));
+
+            svg2.append("image")
+                .attr("xlink:href",flag_countries[i].flag_src)
+                .attr("x", x)
+                .attr("y", y)
+                .attr("width", img_width)
+                .attr("height", img_height)
+                .attr("preserveAspectRatio","xMidYMid meet")
+                .attr("clip-path", function(d){return "url(#"+flag_countries[i].id+")";});
+        }
+
+        //Drawing the borders
+        svg2.append("path")
+            .style("stroke", "#000000")
+            .style("fill", "None")
+            .attr("d", path2(countries));
+
+        svg2
+            .append("text")
+            .attr("x", 300)
+            .attr("y", 20)
+            .attr("font-family", "Helvetica")
+            .text("Самые популярные фильмы по всем странам")
+            .style("font-size", "25px")
+            .attr("alignment-baseline", "middle");
+
+        let zoom = d3.zoom()
+            .on('zoom', () => {
+                svg2.attr('transform', d3.event.transform)
+            });
+
+        svg2.call(zoom);
+    };
+
+  function firstMap(error, topo, world, names) {
     // Draw the map
     svg1
         .append("g")
@@ -91,6 +506,9 @@
         .attr("d", d3.geoPath().projection(projection))
         // set the color of each country
         .attr("fill", function (d) {
+            if (d.properties["Universe Logo"] === 'No_data'){
+                console.log(d.properties["ADMIN"])
+            };
           //console.log(d.properties["Universe Logo"]);
           return colorScale(d.properties.Universe);
         })
@@ -190,21 +608,6 @@
         .text("Самая популярная киновселенная по всему миру")
         .style("font-size", "25px")
         .attr("alignment-baseline", "middle");
-
-    svg2
-        .append("g")
-        .selectAll("path")
-        .data(topo.features)
-        .enter()
-        .append("path")
-        // draw each country
-        .attr("d", d3.geoPath().projection(projection))
-        // set the color of each country
-        .attr("fill", function (d) {
-            //console.log(d.properties["Universe Logo"]);
-            return colorScale1(d.properties.Universe);
-        });
-
   }
 
 </script>
