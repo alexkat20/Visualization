@@ -104,9 +104,9 @@ function createBubbleChart(error, countries, continentNames) {
     }
   }
 
-  function flagFill() {
-    return isChecked("#flags");
-  }
+  //function flagFill() {
+  //  return isChecked("#flags");
+  //}
 
   function isChecked(elementID) {
     return d3.select(elementID).property("checked");
@@ -139,7 +139,7 @@ function createBubbleChart(error, countries, continentNames) {
   function updateCircles() {
     circles
         .attr("fill", function(d) {
-          return flagFill() ? "url(#" + d.CountryCode + ")" : superheroesColorScale(d.Superhero);
+          return superheroesColorScale(d.Superhero);
         });
   }
 
@@ -364,16 +364,16 @@ function createBubbleChart(error, countries, continentNames) {
   }
 
   function forceCollide(d) {
-    return countryCenterGrouping() || populationGrouping() ? 0 : circleRadiusScale(d.Population) + 1;
+    return circleRadiusScale(d.Population) + 1;
   }
 
-  function countryCenterGrouping() {
-    return isChecked("#country-centers");
-  }
-
-  function populationGrouping() {
-    return isChecked("#population");
-  }
+  //function countryCenterGrouping() {
+  //  return isChecked("#country-centers");
+  //}
+//
+  //function populationGrouping() {
+  //  return isChecked("#population");
+  //}
 
   function addFlagDefinitions() {
     var defs = svg.append("defs");
@@ -403,7 +403,7 @@ function createBubbleChart(error, countries, continentNames) {
   function addFillListener() {
     d3.selectAll('input[name="fill"]')
         .on("change", function() {
-          toggleContinentKey(!flagFill() && !populationGrouping());
+          toggleContinentKey();
           updateCircles();
         });
   }
@@ -416,8 +416,7 @@ function createBubbleChart(error, countries, continentNames) {
     function addListener(selector, forces) {
       d3.select(selector).on("click", function() {
         updateForces(forces);
-        toggleContinentKey(!flagFill() && !populationGrouping());
-        togglePopulationAxes(populationGrouping());
+        toggleContinentKey();
       });
     }
 
