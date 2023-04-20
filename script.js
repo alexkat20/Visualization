@@ -45,6 +45,247 @@ function createBubbleChart(error, countries, continentNames) {
         .attr("height", height);
   }
 
+//
+    svg
+        .append("rect")
+        .attr("x", 50)
+        .attr("y", 900)
+        .attr("width", 200)
+        .attr("height", 25)
+        .attr('stroke', 'black')
+        .attr('fill', '#2d2d2d');
+
+    svg .append("text")
+      .attr("x", 83)
+      .attr("y", 912)
+      .text("Black Panther")
+      .style("font-size", "22px")
+      .attr("alignment-baseline", "middle")
+        .attr('fill', 'WHITE');
+
+    svg
+        .append("rect")
+        .attr("x", 50)
+        .attr("y", 933)
+        .attr("width", 200)
+        .attr("height", 25)
+        .attr('stroke', 'black')
+        .attr('fill', '#a71814');
+  svg .append("text")
+      .attr("x", 83)
+      .attr("y", 945)
+      .text("Spider Man")
+      .style("font-size", "22px")
+      .attr("alignment-baseline", "middle")
+      .attr('fill', 'WHITE');
+
+    svg
+        .append("rect")
+        .attr("x", 50)
+        .attr("y", 966)
+        .attr("width", 200)
+        .attr("height", 25)
+        .attr('stroke', 'black')
+        .attr('fill', '#b6af06');
+
+    svg .append("text")
+        .attr("x", 83)
+        .attr("y", 978)
+        .text("Captain Marvel")
+        .style("font-size", "22px")
+        .attr("alignment-baseline", "middle")
+        .attr('fill', 'WHITE');
+    svg
+        .append("rect")
+        .attr("x", 275)
+        .attr("y", 900)
+        .attr("width", 200)
+        .attr("height", 25)
+        .attr('stroke', 'black')
+        .attr('fill', '#8b2323');
+
+    svg .append("text")
+        .attr("x", 300)
+        .attr("y", 912)
+        .text("Deadpool")
+        .style("font-size", "22px")
+        .attr("alignment-baseline", "middle")
+        .attr('fill', 'WHITE');
+
+    svg
+        .append("rect")
+        .attr("x", 275)
+        .attr("y", 933)
+        .attr("width", 200)
+        .attr("height", 25)
+        .attr('stroke', 'black')
+        .attr('fill', '#f6576d');
+
+    svg .append("text")
+        .attr("x", 300)
+        .attr("y", 946)
+        .text("Wonder Woman")
+        .style("font-size", "22px")
+        .attr("alignment-baseline", "middle")
+        .attr('fill', 'WHITE');
+
+    svg
+        .append("rect")
+        .attr("x", 275)
+        .attr("y", 966)
+        .attr("width", 200)
+        .attr("height", 25)
+        .attr('stroke', 'black')
+        .attr('fill', '#00991f');
+    svg .append("text")
+        .attr("x", 300)
+        .attr("y", 979)
+        .text("Avengers")
+        .style("font-size", "22px")
+        .attr("alignment-baseline", "middle")
+        .attr('fill', 'WHITE');
+
+    svg
+        .append("rect")
+        .attr("x", 500)
+        .attr("y", 900)
+        .attr("width", 200)
+        .attr("height", 25)
+        .attr('stroke', 'black')
+        .attr('fill', '#003768');
+    svg .append("text")
+        .attr("x", 525)
+        .attr("y", 913)
+        .text("Justice League")
+        .style("font-size", "22px")
+        .attr("alignment-baseline", "middle")
+        .attr('fill', 'WHITE');
+
+    svg
+        .append("rect")
+        .attr("x", 500)
+        .attr("y", 933)
+        .attr("width", 200)
+        .attr("height", 25)
+        .attr('stroke', 'black')
+        .attr('fill', '#65A49A');
+    svg .append("text")
+        .attr("x", 525)
+        .attr("y", 946)
+        .text("Aquaman")
+        .style("font-size", "22px")
+        .attr("alignment-baseline", "middle")
+        .attr('fill', 'WHITE');
+    svg
+        .append("rect")
+        .attr("x", 500)
+        .attr("y", 966)
+        .attr("width", 200)
+        .attr("height", 25)
+        .attr('stroke', 'black')
+        .attr('fill', '#8E9599');
+    svg .append("text")
+        .attr("x", 525)
+        .attr("y", 979)
+        .text("Venom")
+        .style("font-size", "22px")
+        .attr("alignment-baseline", "middle")
+        .attr('fill', 'WHITE');
+    svg
+        .append("rect")
+        .attr("x", 725)
+        .attr("y", 900)
+        .attr("width", 200)
+        .attr("height", 25)
+        .attr('stroke', 'black')
+        .attr('fill', '#ab5dee');
+    svg .append("text")
+        .attr("x", 750)
+        .attr("y", 913)
+        .text("Joker")
+        .style("font-size", "22px")
+        .attr("alignment-baseline", "middle")
+        .attr('fill', 'WHITE');
+    svg
+        .append("rect")
+        .attr("x", 725)
+        .attr("y", 933)
+        .attr("width", 200)
+        .attr("height", 25)
+        .attr('stroke', 'black')
+        .attr('fill', '#242424');
+    svg .append("text")
+        .attr("x", 750)
+        .attr("y", 946)
+        .text("Batman")
+        .style("font-size", "22px")
+        .attr("alignment-baseline", "middle")
+        .attr('fill', 'WHITE');
+    svg
+        .append("rect")
+        .attr("x", 725)
+        .attr("y", 966)
+        .attr("width", 200)
+        .attr("height", 25)
+        .attr('stroke', 'black')
+        .attr('fill', '#f67861');
+    svg .append("text")
+        .attr("x", 725)
+        .attr("y", 979)
+        .text("Guardians of the Galaxy")
+        .style("font-size", "20px")
+        .attr("alignment-baseline", "middle")
+        .attr('fill', 'WHITE');
+    svg
+        .append("rect")
+        .attr("x", 950)
+        .attr("y", 900)
+        .attr("width", 200)
+        .attr("height", 25)
+        .attr('stroke', 'black')
+        .attr('fill', '#2e0527');
+    svg .append("text")
+        .attr("x", 975)
+        .attr("y", 913)
+        .text("Suicide Squad")
+        .style("font-size", "22px")
+        .attr("alignment-baseline", "middle")
+        .attr('fill', 'WHITE');
+    svg
+        .append("rect")
+        .attr("x", 950)
+        .attr("y", 933)
+        .attr("width", 200)
+        .attr("height", 25)
+        .attr('stroke', 'black')
+        .attr('fill', '#f11712');
+  svg .append("text")
+      .attr("x", 975)
+      .attr("y", 946)
+      .text("Superman")
+      .style("font-size", "22px")
+      .attr("alignment-baseline", "middle")
+      .attr('fill', 'WHITE');
+    svg
+        .append("rect")
+        .attr("x", 950)
+        .attr("y", 966)
+        .attr("width", 200)
+        .attr("height", 25)
+        .attr('stroke', 'black')
+        .attr('fill', '#1d90f3');
+  svg .append("text")
+      .attr("x", 975)
+      .attr("y", 979)
+      .text("X-man")
+      .style("font-size", "22px")
+      .attr("alignment-baseline", "middle")
+      .attr('fill', 'WHITE');
+
+
+
+
+
   function toggleContinentKey() {
     var keyElementWidth = 120,
         keyElementHeight = 30;
