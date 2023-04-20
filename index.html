@@ -13,22 +13,22 @@
 
 
 
-<h2>Сменить карту</h2>
+<h2 align="center">Популярность супергеройских фильмов и вселенных в рахных странах </h2>
 <form id="form" class="btn-group btn-group-toggle" data-toggle="buttons">
     <label class="btn btn-secondary active">
         <input type="radio" name="controlHeatmapType" value="MRR" checked>Популярность киновселенных в странах<br>
     </label>
     <label class="btn btn-secondary">
-        <input type="radio" name="controlHeatmapType" value="LYL">Популярность супергероев в странах<br>
+        <input type="radio" name="controlHeatmapType" value="LYL">Популярность супергеройских фильмов в странах<br>
     </label>
     <label>
-        <input id="combine" type="radio" name="grouping" value="combine">Combine
+        <input id="combine" type="radio" name="grouping" value="combine">Страны с фильмами
     </label>
     <label>
-        <input id="universe" type="radio" name="grouping" value="universe">Universe
+        <input id="universe" type="radio" name="grouping" value="universe">Marvel/DC
     </label>
     <label>
-        <input id="superheroes" type="radio" name="grouping" value="superheroes">Superheroes
+        <input id="superheroes" type="radio" name="grouping" value="superheroes">Разделение по фильмам
     </label>
 
 
@@ -193,7 +193,7 @@
         "Russia": "./Media/BM.png",
         "Germany": "./Media/GG.png",
 
-        "United States of America": "./Media/BM.png",
+        "United States of America": "./Media/BP.png",
 
         "Belarus": "./Media/SS.png",
         "Luxembourg": "./Media/SM.png",
@@ -403,11 +403,71 @@
         }
         var countries = topojson.feature(world, world.objects.countries);
 
+        var images = ["./Media/A.png",
+            "./Media/AM.png",
+            "./Media/BM.png",
+            "./Media/BP.png",
+            "./Media/CM.png",
+            "./Media/DP.png",
+            "./Media/GG.png",
+            "./Media/J.png",
+            "./Media/JL.png",
+            "./Media/SM.png",
+            "./Media/SpM.png",
+            "./Media/SS.png",
+            "./Media/V.png",
+            "./Media/WW.png",
+            "./Media/XM.png"
+        ]
+
+        var super_names = [
+            "Avengers",
+            "Aquaman",
+            "Batman",
+            "Black Panther",
+            "Captain Marvel",
+            "Deadpool",
+            "Guardians of the Galaxy",
+            "Joker",
+            "Justice League",
+            "Superman",
+            "Spiderman",
+            "Suicide Squad",
+            "Venom",
+            "Wonder Woman",
+            "XMen"
+
+        ]
+
+        for (i=0; i<images.length; i++) {
+            x = 0;
+            y = 40;
+            img_width = 40;
+            img_height = 40;
+            svg2.append("image")
+                .attr("xlink:href",images[i])
+                .attr("x", x)
+                .attr("y", 40 * (i + 10))
+                .attr("width", img_width)
+                .attr("height", img_height);
+
+            svg2.append("text")
+                .attr("x", x + 50)
+                .attr("y", 40 * (i + 10) + 20)
+                .attr("font-family", "Helvetica")
+                .text(super_names[i])
+                .style("font-size", "15px")
+                .attr("alignment-baseline", "middle");
+        }
+
+
 
         svg2
             .append("path")
             .data(countries)
             .attr("d", path);
+
+
 
 
         var flag_countries = countries.features.filter(function (d) {
@@ -439,10 +499,10 @@
                 img_height =  400;
             }
             else if (flag_countries[i].name === 'United States of America'){
-                x = centroid[0] - 40;
-                y = centroid[1] - 60;
-                img_width = 200;
-                img_height =  200;
+                x = centroid[0] - 25;
+                y = centroid[1] - 30;
+                img_width = 150;
+                img_height =  150;
             }
             else if (flag_countries[i].name === 'France'){
                 console.log("FRANCE");

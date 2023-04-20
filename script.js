@@ -14,7 +14,8 @@ function createBubbleChart(error, countries, continentNames) {
       .domain(continents.values());
 
   var superheroes = d3.set(countries.map(function(country) { return country.Superhero; }));
-  var superheroesColorScale = d3.scaleOrdinal(['#2d2d2d','#a71814', '#b6af06','#8b2323','#f6576d','#00991f','#003768','#65A49A','#8E9599','#ab5dee','#242424','#f67861','#2e0527','#f11712','#1d90f3'])
+  var superheroesColorScale = d3.scaleOrdinal(['#000000','#a71814', '#e5e43d','#8b2323','#f6576d','#00991f',
+    '#003768','#65A49A','#8E9599','#ab5dee','#988829','#f67861','#ffa500','#f11712','#1d90f3'])
       .domain(superheroes.values());
 
     var width = 1200,
@@ -53,7 +54,7 @@ function createBubbleChart(error, countries, continentNames) {
         .attr("width", 200)
         .attr("height", 25)
         .attr('stroke', 'black')
-        .attr('fill', '#2d2d2d');
+        .attr('fill', '#000000');
 
     svg .append("text")
       .attr("x", 83)
@@ -86,7 +87,7 @@ function createBubbleChart(error, countries, continentNames) {
         .attr("width", 200)
         .attr("height", 25)
         .attr('stroke', 'black')
-        .attr('fill', '#b6af06');
+        .attr('fill', '#e5e43d');
 
     svg .append("text")
         .attr("x", 83)
@@ -213,7 +214,7 @@ function createBubbleChart(error, countries, continentNames) {
         .attr("width", 200)
         .attr("height", 25)
         .attr('stroke', 'black')
-        .attr('fill', '#242424');
+        .attr('fill', '#988829');
     svg .append("text")
         .attr("x", 750)
         .attr("y", 946)
@@ -243,7 +244,7 @@ function createBubbleChart(error, countries, continentNames) {
         .attr("width", 200)
         .attr("height", 25)
         .attr('stroke', 'black')
-        .attr('fill', '#2e0527');
+        .attr('fill', '#ffa500');
     svg .append("text")
         .attr("x", 975)
         .attr("y", 913)
