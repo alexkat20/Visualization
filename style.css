@@ -11,9 +11,8 @@ div.tooltip-donut {
 }
 
 .btn-secondary {
-  color: #fff;
-  background-color: #6c757d;
-  border-color: #6c757d;
+  color: black;
+  border-color: black;
 }
 .btn {
   display: inline-block;
